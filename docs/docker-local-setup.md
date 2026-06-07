@@ -16,28 +16,38 @@ This guide documents the developer workflow and commands required to set up and 
 
 Run the following commands sequentially from the root of your project directory in **PowerShell**:
 
-### Step 1: Copy Configuration Templates
+### Quick Start (1-Line Command)
+You can copy configuration files, build, and start the entire Docker dev stack with a single command:
+```powershell
+npm run docker:dev:start -- --build
+```
+
+### Full Step-by-Step Setup
+
+If you prefer to run the process manually, execute these commands:
+
+#### Step 1: Copy Configuration Templates
 ```powershell
 Copy-Item docker/Config.php src/Include/Config.php
 ```
 
-### Step 2: Install Node Dependencies (Bypass Hooks)
+#### Step 2: Install Node Dependencies (Bypass Hooks)
 ```powershell
 npm ci --ignore-scripts
 ```
 
-### Step 3: Clean Up Existing Docker Containers (Optional)
+#### Step 3: Clean Up Existing Docker Containers (Optional)
 Ensure the Docker namespace and network are clear of any conflicting resources:
 ```powershell
 docker compose -f docker/docker-compose.yaml --profile dev down -v
 ```
 
-### Step 4: Launch and Build Dev Container Stack
+#### Step 4: Launch and Build Dev Container Stack
 ```powershell
 docker compose -f docker/docker-compose.yaml --profile dev up -d --build
 ```
 
-### Step 5: Run Compilation inside the Container
+#### Step 5: Run Compilation inside the Container
 Trigger the dependency manager (Composer) and asset bundlers (Webpack) inside the running container context:
 ```powershell
 docker compose -f docker/docker-compose.yaml --profile dev exec -w /home/ChurchCRM webserver-dev bash -c "source /root/.nvm/nvm.sh && npm run build"
